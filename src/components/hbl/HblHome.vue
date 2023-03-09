@@ -11,7 +11,7 @@ export default {
   name: 'HblHome',
   components: { HblLogin },
   computed: {
-    ...mapState(useUserStore, ['loggedIn']),
+    ...mapState(useUserStore, { loggedIn: 'loggedIn' }),
   },
 };
 </script>

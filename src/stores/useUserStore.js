@@ -1,10 +1,16 @@
 import { defineStore } from 'pinia';
+import { useStorage } from '@vueuse/core';
 import axios from 'axios';
-import router from '@/router';
 
 export const useUserStore = defineStore('user', {
-  state: () => ({ email: '', loggedIn: false }),
-  getters: {},
+  state: () => ({
+    token: useStorage('token', ''),
+  }),
+  getters: {
+    loggedIn(state) {
+      return state.token !== '';
+    },
+  },
   actions: {
     login(user) {
       return axios
@@ -13,17 +19,18 @@ export const useUserStore = defineStore('user', {
           password: user.password,
         })
         .then((response) => {
-          console.log(response);
-          window.open(response.data);
-        })
-        .then((responseTwo) => {
-          console.log(responseTwo);
+          let win = window.open(response.data);
+          let checkWin = setInterval(() => {
+            if (!win || !win.closed) {
+              return;
+            }
+            clearInterval(checkWin);
+            window.location.reload();
+          });
         });
     },
     logout() {
       localStorage.removeItem('token');
-      this.email = '';
-      this.loggedIn = false;
     },
   },
 });
