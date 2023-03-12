@@ -1,18 +1,16 @@
 import { defineStore } from 'pinia';
-import { useStorage } from '@vueuse/core';
 import axios from 'axios';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    token: useStorage('token', ''),
+    email: '',
   }),
   getters: {
-    loggedIn(state) {
-      return state.token !== '';
-    },
+    loggedIn: (state) => state.email !== '',
   },
   actions: {
     login(user) {
+      this.email = user;
       return axios
         .post('/hbl/login/', {
           email: user.email,
@@ -26,11 +24,11 @@ export const useUserStore = defineStore('user', {
             }
             clearInterval(checkWin);
             window.location.reload();
-          });
+          }, 500);
         });
     },
     logout() {
-      localStorage.removeItem('token');
+      this.email = false;
     },
   },
 });

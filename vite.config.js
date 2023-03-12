@@ -26,6 +26,11 @@ export default defineConfig(({ command, mode }) => {
             changeOrigin: true,
             secure: false,
           },
+          '/hbl/home': {
+            target: isDev ? 'https://127.0.0.1:8000' : 'https://jimpollaro.com',
+            changeOrigin: true,
+            secure: false,
+          },
         },
       },
     };
